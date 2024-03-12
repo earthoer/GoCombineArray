@@ -9,7 +9,11 @@ import (
 
 func ProcessArrays(c *gin.Context) {
 	var body models.Body
-	c.Bind(&body)
+	if errors := c.Bind(&body); errors != nil {
+		c.JSON(400, gin.H{"messages": errors.Error()})
+		return
+	}
+
 	var CombineArray []string
 	var UniqueArray []string
 	duplicate := map[string]int{}
